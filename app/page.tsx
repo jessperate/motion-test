@@ -1,23 +1,23 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
+import { logos } from './logos'
 
 interface Integration {
   name: string
-  domain: string
+  logo: string
   position: { top?: string; bottom?: string; left?: string; right?: string }
 }
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
   const integrations: Integration[] = [
-    { name: 'Webflow', domain: 'webflow.com', position: { top: '130px', left: '130px' } },
-    { name: 'WordPress', domain: 'wordpress.com', position: { top: '260px', right: '390px' } },
-    { name: 'Contentful', domain: 'contentful.com', position: { top: '520px', right: '130px' } },
-    { name: 'Asana', domain: 'asana.com', position: { bottom: '390px', left: '130px' } },
-    { name: 'ClickUp', domain: 'clickup.com', position: { bottom: '520px', left: '780px' } },
-    { name: 'Monday', domain: 'monday.com', position: { bottom: '260px', right: '260px' } },
+    { name: 'Webflow', logo: 'webflow', position: { top: '130px', left: '130px' } },
+    { name: 'WordPress', logo: 'wordpress', position: { top: '260px', right: '390px' } },
+    { name: 'Contentful', logo: 'contentful', position: { top: '520px', right: '130px' } },
+    { name: 'Asana', logo: 'asana', position: { bottom: '390px', left: '130px' } },
+    { name: 'ClickUp', logo: 'clickup', position: { bottom: '520px', left: '780px' } },
+    { name: 'Monday', logo: 'monday', position: { bottom: '260px', right: '260px' } },
   ]
 
   useEffect(() => {
@@ -400,18 +400,7 @@ export default function Home() {
         {/* Integration Cells with Logos */}
         {integrations.map((integration, idx) => (
           <div key={idx} className="integration-cell" style={integration.position}>
-            <Image
-              src={`https://logo.clearbit.com/${integration.domain}`}
-              alt={integration.name}
-              width={90}
-              height={90}
-              style={{ objectFit: 'contain' }}
-              unoptimized
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-              }}
-            />
+            {logos[integration.logo as keyof typeof logos]}
           </div>
         ))}
 
@@ -453,51 +442,35 @@ export default function Home() {
           <div className="integrations-label">Connects with the tools your team already uses</div>
           <div className="integrations-logos">
             <div className="integration-item">
-              <div className="integration-icon">
-                <img src="https://logo.clearbit.com/webflow.com" alt="Webflow" width={48} height={48} />
-              </div>
+              <div className="integration-icon">{logos.webflow}</div>
               <div className="integration-name">Webflow</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">
-                <img src="https://logo.clearbit.com/wordpress.com" alt="WordPress" width={48} height={48} />
-              </div>
+              <div className="integration-icon">{logos.wordpress}</div>
               <div className="integration-name">WordPress</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">
-                <img src="https://logo.clearbit.com/contentful.com" alt="Contentful" width={48} height={48} />
-              </div>
+              <div className="integration-icon">{logos.contentful}</div>
               <div className="integration-name">Contentful</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">
-                <img src="https://logo.clearbit.com/sanity.io" alt="Sanity" width={48} height={48} />
-              </div>
+              <div className="integration-icon">{logos.sanity}</div>
               <div className="integration-name">Sanity</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">
-                <img src="https://logo.clearbit.com/asana.com" alt="Asana" width={48} height={48} />
-              </div>
+              <div className="integration-icon">{logos.asana}</div>
               <div className="integration-name">Asana</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">
-                <img src="https://logo.clearbit.com/clickup.com" alt="ClickUp" width={48} height={48} />
-              </div>
+              <div className="integration-icon">{logos.clickup}</div>
               <div className="integration-name">ClickUp</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">
-                <img src="https://logo.clearbit.com/monday.com" alt="Monday" width={48} height={48} />
-              </div>
+              <div className="integration-icon">{logos.monday}</div>
               <div className="integration-name">Monday</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">
-                <img src="https://logo.clearbit.com/airtable.com" alt="Airtable" width={48} height={48} />
-              </div>
+              <div className="integration-icon">{logos.airtable}</div>
               <div className="integration-name">Airtable</div>
             </div>
           </div>
