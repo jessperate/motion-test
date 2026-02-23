@@ -7,41 +7,21 @@ interface Integration {
   name: string
   domain: string
   position: { top?: string; bottom?: string; left?: string; right?: string }
-  logoUrl?: string
 }
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
-  const [integrations, setIntegrations] = useState<Integration[]>([
+  const integrations: Integration[] = [
     { name: 'Webflow', domain: 'webflow.com', position: { top: '130px', left: '130px' } },
     { name: 'WordPress', domain: 'wordpress.com', position: { top: '260px', right: '390px' } },
     { name: 'Contentful', domain: 'contentful.com', position: { top: '520px', right: '130px' } },
     { name: 'Asana', domain: 'asana.com', position: { bottom: '390px', left: '130px' } },
     { name: 'ClickUp', domain: 'clickup.com', position: { bottom: '520px', left: '780px' } },
     { name: 'Monday', domain: 'monday.com', position: { bottom: '260px', right: '260px' } },
-  ])
+  ]
 
   useEffect(() => {
     setMounted(true)
-
-    // Fetch logos from Brandfetch
-    integrations.forEach(async (integration, index) => {
-      try {
-        const response = await fetch(`https://api.brandfetch.io/v2/brands/${integration.domain}`)
-        if (response.ok) {
-          const data = await response.json()
-          const logoUrl = data.logos?.[0]?.formats?.[0]?.src || data.icon?.image || null
-
-          setIntegrations(prev => {
-            const updated = [...prev]
-            updated[index] = { ...updated[index], logoUrl }
-            return updated
-          })
-        }
-      } catch (error) {
-        console.error(`Failed to fetch logo for ${integration.name}`)
-      }
-    })
   }, [])
 
   return (
@@ -420,13 +400,18 @@ export default function Home() {
         {/* Integration Cells with Logos */}
         {integrations.map((integration, idx) => (
           <div key={idx} className="integration-cell" style={integration.position}>
-            {integration.logoUrl ? (
-              <img src={integration.logoUrl} alt={integration.name} />
-            ) : (
-              <div style={{ fontSize: '32px', color: '#002910', fontWeight: 700 }}>
-                {integration.name.charAt(0)}
-              </div>
-            )}
+            <img
+              src={`https://logo.clearbit.com/${integration.domain}`}
+              alt={integration.name}
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+                const parent = target.parentElement;
+                if (parent) {
+                  parent.innerHTML = `<div style="font-size: 32px; color: #002910; font-weight: 700;">${integration.name.charAt(0)}</div>`;
+                }
+              }}
+            />
           </div>
         ))}
 
