@@ -1,12 +1,47 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
+
+interface Integration {
+  name: string
+  domain: string
+  position: { top?: string; bottom?: string; left?: string; right?: string }
+  logoUrl?: string
+}
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
+  const [integrations, setIntegrations] = useState<Integration[]>([
+    { name: 'Webflow', domain: 'webflow.com', position: { top: '130px', left: '130px' } },
+    { name: 'WordPress', domain: 'wordpress.com', position: { top: '260px', right: '390px' } },
+    { name: 'Contentful', domain: 'contentful.com', position: { top: '520px', right: '130px' } },
+    { name: 'Asana', domain: 'asana.com', position: { bottom: '390px', left: '130px' } },
+    { name: 'ClickUp', domain: 'clickup.com', position: { bottom: '520px', left: '780px' } },
+    { name: 'Monday', domain: 'monday.com', position: { bottom: '260px', right: '260px' } },
+  ])
 
   useEffect(() => {
     setMounted(true)
+
+    // Fetch logos from Brandfetch
+    integrations.forEach(async (integration, index) => {
+      try {
+        const response = await fetch(`https://api.brandfetch.io/v2/brands/${integration.domain}`)
+        if (response.ok) {
+          const data = await response.json()
+          const logoUrl = data.logos?.[0]?.formats?.[0]?.src || data.icon?.image || null
+
+          setIntegrations(prev => {
+            const updated = [...prev]
+            updated[index] = { ...updated[index], logoUrl }
+            return updated
+          })
+        }
+      } catch (error) {
+        console.error(`Failed to fetch logo for ${integration.name}`)
+      }
+    })
   }, [])
 
   return (
@@ -155,38 +190,66 @@ export default function Home() {
 
         .colored-cell {
           position: absolute;
+          width: 130px;
+          height: 130px;
           z-index: 1;
         }
 
-        .integration-logo {
+        .integration-cell {
           position: absolute;
-          z-index: 2;
-          width: 80px;
-          height: 80px;
-          border-radius: 12px;
+          width: 130px;
+          height: 130px;
+          background: rgba(248, 255, 250, 0.95);
+          border: 1px solid #008c44;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 32px;
-          animation: float 3s ease-in-out infinite;
+          z-index: 3;
+          padding: 20px;
         }
 
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+        .integration-cell img {
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
         }
 
-        .pulse-line {
+        .pulse-line-vertical {
+          position: absolute;
+          width: 2px;
+          background: linear-gradient(180deg, transparent, #00ff64, transparent);
+          z-index: 2;
+          animation: pulseVertical 2s ease-in-out infinite;
+        }
+
+        .pulse-line-horizontal {
           position: absolute;
           height: 2px;
           background: linear-gradient(90deg, transparent, #00ff64, transparent);
-          z-index: 1;
-          animation: pulse 2s ease-in-out infinite;
+          z-index: 2;
+          animation: pulseHorizontal 2s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 1; }
+        @keyframes pulseVertical {
+          0%, 100% {
+            opacity: 0.2;
+            transform: scaleY(0.8);
+          }
+          50% {
+            opacity: 1;
+            transform: scaleY(1);
+          }
+        }
+
+        @keyframes pulseHorizontal {
+          0%, 100% {
+            opacity: 0.2;
+            transform: scaleX(0.8);
+          }
+          50% {
+            opacity: 1;
+            transform: scaleX(1);
+          }
         }
 
         .eyebrow {
@@ -312,7 +375,6 @@ export default function Home() {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 24px;
         }
 
         .integration-name {
@@ -347,34 +409,39 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="hero">
-        {/* Colored Cells */}
-        <div className="colored-cell" style={{ top: '120px', left: '5%', width: '130px', height: '130px', background: '#8b8b2d' }}></div>
-        <div className="colored-cell" style={{ top: '160px', right: '8%', width: '260px', height: '130px', background: '#0000cc' }}></div>
-        <div className="colored-cell" style={{ top: '380px', right: '10%', width: '130px', height: '130px', background: '#b3428b' }}></div>
-        <div className="colored-cell" style={{ bottom: '280px', left: '3%', width: '130px', height: '130px', background: '#0000cc' }}></div>
-        <div className="colored-cell" style={{ bottom: '180px', left: '15%', width: '130px', height: '130px', background: '#b3428b' }}></div>
-        <div className="colored-cell" style={{ bottom: '240px', right: '15%', width: '260px', height: '130px', background: '#8b8b2d' }}></div>
+        {/* Colored Cells (background accent cells) */}
+        <div className="colored-cell" style={{ top: '130px', left: '0px', background: '#8b8b2d' }}></div>
+        <div className="colored-cell" style={{ top: '260px', right: '0px', background: '#0000cc', width: '260px' }}></div>
+        <div className="colored-cell" style={{ top: '520px', right: '0px', background: '#b3428b' }}></div>
+        <div className="colored-cell" style={{ bottom: '390px', left: '0px', background: '#0000cc' }}></div>
+        <div className="colored-cell" style={{ bottom: '520px', left: '650px', background: '#b3428b' }}></div>
+        <div className="colored-cell" style={{ bottom: '260px', right: '130px', background: '#8b8b2d', width: '260px' }}></div>
 
-        {/* Integration Logos in Cells */}
-        <div className="integration-logo" style={{ top: '140px', left: 'calc(5% + 25px)', background: 'rgba(248, 255, 250, 0.9)', animation: mounted ? 'float 3s ease-in-out infinite' : 'none' }}>
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="#002910"><text x="50%" y="50%" textAnchor="middle" dy=".3em" fontSize="24">W</text></svg>
-        </div>
-        <div className="integration-logo" style={{ top: '180px', right: 'calc(8% + 90px)', background: 'rgba(248, 255, 250, 0.9)', animationDelay: '0.5s', animation: mounted ? 'float 3s ease-in-out infinite 0.5s' : 'none' }}>
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="#002910"><text x="50%" y="50%" textAnchor="middle" dy=".3em" fontSize="24">C</text></svg>
-        </div>
-        <div className="integration-logo" style={{ top: '400px', right: 'calc(10% + 25px)', background: 'rgba(248, 255, 250, 0.9)', animationDelay: '1s', animation: mounted ? 'float 3s ease-in-out infinite 1s' : 'none' }}>
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="#002910"><text x="50%" y="50%" textAnchor="middle" dy=".3em" fontSize="24">A</text></svg>
-        </div>
-        <div className="integration-logo" style={{ bottom: '300px', left: 'calc(3% + 25px)', background: 'rgba(248, 255, 250, 0.9)', animationDelay: '1.5s', animation: mounted ? 'float 3s ease-in-out infinite 1.5s' : 'none' }}>
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="#002910"><text x="50%" y="50%" textAnchor="middle" dy=".3em" fontSize="24">M</text></svg>
-        </div>
+        {/* Integration Cells with Logos */}
+        {integrations.map((integration, idx) => (
+          <div key={idx} className="integration-cell" style={integration.position}>
+            {integration.logoUrl ? (
+              <img src={integration.logoUrl} alt={integration.name} />
+            ) : (
+              <div style={{ fontSize: '32px', color: '#002910', fontWeight: 700 }}>
+                {integration.name.charAt(0)}
+              </div>
+            )}
+          </div>
+        ))}
 
-        {/* Animated Pulse Lines */}
+        {/* Pulsating Grid Lines */}
         {mounted && (
           <>
-            <div className="pulse-line" style={{ top: '170px', left: 'calc(5% + 105px)', width: '600px', transform: 'rotate(5deg)', animationDelay: '0s' }}></div>
-            <div className="pulse-line" style={{ top: '320px', right: 'calc(10% + 55px)', width: '400px', transform: 'rotate(-45deg)', animationDelay: '1s' }}></div>
-            <div className="pulse-line" style={{ bottom: '320px', left: 'calc(3% + 80px)', width: '350px', transform: 'rotate(20deg)', animationDelay: '0.5s' }}></div>
+            {/* Vertical lines */}
+            <div className="pulse-line-vertical" style={{ left: '195px', top: '130px', height: '520px', animationDelay: '0s' }}></div>
+            <div className="pulse-line-vertical" style={{ right: '195px', top: '260px', height: '390px', animationDelay: '0.5s' }}></div>
+            <div className="pulse-line-vertical" style={{ left: '845px', bottom: '260px', height: '390px', animationDelay: '1s' }}></div>
+
+            {/* Horizontal lines */}
+            <div className="pulse-line-horizontal" style={{ top: '195px', left: '130px', width: '520px', animationDelay: '0.3s' }}></div>
+            <div className="pulse-line-horizontal" style={{ top: '585px', right: '130px', width: '650px', animationDelay: '0.8s' }}></div>
+            <div className="pulse-line-horizontal" style={{ bottom: '455px', left: '130px', width: '780px', animationDelay: '1.3s' }}></div>
           </>
         )}
 
@@ -401,35 +468,51 @@ export default function Home() {
           <div className="integrations-label">Connects with the tools your team already uses</div>
           <div className="integrations-logos">
             <div className="integration-item">
-              <div className="integration-icon">🌊</div>
+              <div className="integration-icon">
+                <img src="https://logo.clearbit.com/webflow.com" alt="Webflow" width={48} height={48} />
+              </div>
               <div className="integration-name">Webflow</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">📝</div>
+              <div className="integration-icon">
+                <img src="https://logo.clearbit.com/wordpress.com" alt="WordPress" width={48} height={48} />
+              </div>
               <div className="integration-name">WordPress</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">🎨</div>
+              <div className="integration-icon">
+                <img src="https://logo.clearbit.com/contentful.com" alt="Contentful" width={48} height={48} />
+              </div>
               <div className="integration-name">Contentful</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">✅</div>
+              <div className="integration-icon">
+                <img src="https://logo.clearbit.com/sanity.io" alt="Sanity" width={48} height={48} />
+              </div>
               <div className="integration-name">Sanity</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">📋</div>
+              <div className="integration-icon">
+                <img src="https://logo.clearbit.com/asana.com" alt="Asana" width={48} height={48} />
+              </div>
               <div className="integration-name">Asana</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">📊</div>
+              <div className="integration-icon">
+                <img src="https://logo.clearbit.com/clickup.com" alt="ClickUp" width={48} height={48} />
+              </div>
               <div className="integration-name">ClickUp</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">📅</div>
-              <div className="integration-name">Monday.com</div>
+              <div className="integration-icon">
+                <img src="https://logo.clearbit.com/monday.com" alt="Monday" width={48} height={48} />
+              </div>
+              <div className="integration-name">Monday</div>
             </div>
             <div className="integration-item">
-              <div className="integration-icon">🗂️</div>
+              <div className="integration-icon">
+                <img src="https://logo.clearbit.com/airtable.com" alt="Airtable" width={48} height={48} />
+              </div>
               <div className="integration-name">Airtable</div>
             </div>
           </div>
