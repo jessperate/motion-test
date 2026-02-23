@@ -3,22 +3,8 @@
 import { useEffect, useState } from 'react'
 import { logos } from './logos'
 
-interface Integration {
-  name: string
-  logo: string
-  position: { top?: string; bottom?: string; left?: string; right?: string }
-}
-
 export default function Home() {
   const [mounted, setMounted] = useState(false)
-  const integrations: Integration[] = [
-    { name: 'Webflow', logo: 'webflow', position: { top: '130px', left: '130px' } },
-    { name: 'WordPress', logo: 'wordpress', position: { top: '260px', right: '390px' } },
-    { name: 'Contentful', logo: 'contentful', position: { top: '520px', right: '130px' } },
-    { name: 'Asana', logo: 'asana', position: { bottom: '390px', left: '130px' } },
-    { name: 'ClickUp', logo: 'clickup', position: { bottom: '520px', left: '780px' } },
-    { name: 'Monday', logo: 'monday', position: { bottom: '260px', right: '260px' } },
-  ]
 
   useEffect(() => {
     setMounted(true)
@@ -75,9 +61,9 @@ export default function Home() {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(#008c4444 1px, transparent 1px),
-            linear-gradient(90deg, #008c4444 1px, transparent 1px);
-          background-size: 130px 130px;
+            linear-gradient(#008c44 1px, transparent 1px),
+            linear-gradient(90deg, #008c44 1px, transparent 1px);
+          background-size: 120px 120px;
           z-index: 0;
         }
 
@@ -96,7 +82,7 @@ export default function Home() {
           gap: 48px;
           background: rgba(223, 234, 227, 0.95);
           border-radius: 100px;
-          padding: 12px 32px;
+          padding: 16px 40px;
         }
 
         .logo {
@@ -148,7 +134,7 @@ export default function Home() {
         .btn-demo {
           background: #00ff64;
           color: #002910;
-          padding: 12px 32px;
+          padding: 14px 32px;
           border-radius: 100px;
           text-decoration: none;
           font-weight: 700;
@@ -170,28 +156,24 @@ export default function Home() {
 
         .colored-cell {
           position: absolute;
-          width: 130px;
-          height: 130px;
           z-index: 1;
         }
 
-        .integration-cell {
+        .profile-photo {
           position: absolute;
-          width: 130px;
-          height: 130px;
-          background: rgba(248, 255, 250, 0.95);
-          border: 1px solid #008c44;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           z-index: 3;
-          padding: 20px;
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          overflow: hidden;
+          background: #fff;
+          border: 3px solid #00ff64;
         }
 
-        .integration-cell img {
-          max-width: 100%;
-          max-height: 100%;
-          object-fit: contain;
+        .profile-photo img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
 
         .pulse-line-vertical {
@@ -234,7 +216,7 @@ export default function Home() {
 
         .eyebrow {
           font-family: 'Saans Mono', monospace;
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 500;
           letter-spacing: 0.08em;
           text-transform: uppercase;
@@ -331,7 +313,7 @@ export default function Home() {
         }
 
         .integrations-logos {
-          background: rgba(248, 255, 250, 0.95);
+          background: rgba(248, 255, 250, 0.98);
           border-radius: 16px;
           padding: 32px 48px;
           display: flex;
@@ -346,7 +328,6 @@ export default function Home() {
           flex-direction: column;
           align-items: center;
           gap: 8px;
-          opacity: 0.9;
         }
 
         .integration-icon {
@@ -359,8 +340,8 @@ export default function Home() {
 
         .integration-name {
           font-family: 'Saans', sans-serif;
-          font-size: 12px;
-          font-weight: 600;
+          font-size: 11px;
+          font-weight: 700;
           color: #002910;
           text-transform: uppercase;
           letter-spacing: 0.05em;
@@ -389,33 +370,34 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="hero">
-        {/* Colored Cells (background accent cells) */}
-        <div className="colored-cell" style={{ top: '130px', left: '0px', background: '#8b8b2d' }}></div>
-        <div className="colored-cell" style={{ top: '260px', right: '0px', background: '#0000cc', width: '260px' }}></div>
-        <div className="colored-cell" style={{ top: '520px', right: '0px', background: '#b3428b' }}></div>
-        <div className="colored-cell" style={{ bottom: '390px', left: '0px', background: '#0000cc' }}></div>
-        <div className="colored-cell" style={{ bottom: '520px', left: '650px', background: '#b3428b' }}></div>
-        <div className="colored-cell" style={{ bottom: '260px', right: '130px', background: '#8b8b2d', width: '260px' }}></div>
+        {/* Colored Cells - just blocks, no logos */}
+        <div className="colored-cell" style={{ top: '120px', left: '0px', width: '120px', height: '120px', background: '#8b8b2d' }}></div>
+        <div className="colored-cell" style={{ top: '180px', right: '0px', width: '120px', height: '120px', background: '#0000cc' }}></div>
+        <div className="colored-cell" style={{ top: '360px', right: '0px', width: '120px', height: '120px', background: '#b3428b' }}></div>
+        <div className="colored-cell" style={{ top: '580px', right: '0px', width: '120px', height: '120px', background: '#8b8b2d' }}></div>
+        <div className="colored-cell" style={{ bottom: '660px', left: '0px', width: '120px', height: '120px', background: '#0000cc' }}></div>
+        <div className="colored-cell" style={{ bottom: '540px', left: '240px', width: '120px', height: '120px', background: '#b3428b' }}></div>
+        <div className="colored-cell" style={{ bottom: '780px', left: '0px', width: '120px', height: '120px', background: '#0000cc' }}></div>
 
-        {/* Integration Cells with Logos */}
-        {integrations.map((integration, idx) => (
-          <div key={idx} className="integration-cell" style={integration.position}>
-            {logos[integration.logo as keyof typeof logos]}
+        {/* Profile Photo */}
+        <div className="profile-photo" style={{ top: '540px', right: '60px' }}>
+          <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #00ff64 0%, #008c44 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', fontWeight: 700, color: '#002910' }}>
+            A
           </div>
-        ))}
+        </div>
 
         {/* Pulsating Grid Lines */}
         {mounted && (
           <>
             {/* Vertical lines */}
-            <div className="pulse-line-vertical" style={{ left: '195px', top: '130px', height: '520px', animationDelay: '0s' }}></div>
-            <div className="pulse-line-vertical" style={{ right: '195px', top: '260px', height: '390px', animationDelay: '0.5s' }}></div>
-            <div className="pulse-line-vertical" style={{ left: '845px', bottom: '260px', height: '390px', animationDelay: '1s' }}></div>
+            <div className="pulse-line-vertical" style={{ left: '120px', top: '120px', height: '480px', animationDelay: '0s' }}></div>
+            <div className="pulse-line-vertical" style={{ right: '120px', top: '180px', height: '540px', animationDelay: '0.5s' }}></div>
+            <div className="pulse-line-vertical" style={{ left: '240px', bottom: '540px', height: '320px', animationDelay: '1s' }}></div>
 
             {/* Horizontal lines */}
-            <div className="pulse-line-horizontal" style={{ top: '195px', left: '130px', width: '520px', animationDelay: '0.3s' }}></div>
-            <div className="pulse-line-horizontal" style={{ top: '585px', right: '130px', width: '650px', animationDelay: '0.8s' }}></div>
-            <div className="pulse-line-horizontal" style={{ bottom: '455px', left: '130px', width: '780px', animationDelay: '1.3s' }}></div>
+            <div className="pulse-line-horizontal" style={{ top: '120px', left: '120px', width: '400px', animationDelay: '0.3s' }}></div>
+            <div className="pulse-line-horizontal" style={{ top: '360px', right: '120px', width: '500px', animationDelay: '0.8s' }}></div>
+            <div className="pulse-line-horizontal" style={{ bottom: '660px', left: '120px', width: '600px', animationDelay: '1.3s' }}></div>
           </>
         )}
 
