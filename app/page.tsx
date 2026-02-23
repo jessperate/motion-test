@@ -400,16 +400,16 @@ export default function Home() {
         {/* Integration Cells with Logos */}
         {integrations.map((integration, idx) => (
           <div key={idx} className="integration-cell" style={integration.position}>
-            <img
+            <Image
               src={`https://logo.clearbit.com/${integration.domain}`}
               alt={integration.name}
+              width={90}
+              height={90}
+              style={{ objectFit: 'contain' }}
+              unoptimized
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.style.display = 'none';
-                const parent = target.parentElement;
-                if (parent) {
-                  parent.innerHTML = `<div style="font-size: 32px; color: #002910; font-weight: 700;">${integration.name.charAt(0)}</div>`;
-                }
               }}
             />
           </div>
