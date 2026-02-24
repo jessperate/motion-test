@@ -60,11 +60,37 @@ export default function Home() {
         .grid-bg {
           position: absolute;
           inset: 0;
-          background-image:
-            linear-gradient(#008c44 1px, transparent 1px),
-            linear-gradient(90deg, #008c44 1px, transparent 1px);
-          background-size: 120px 120px;
           z-index: 0;
+        }
+
+        .grid-line {
+          position: absolute;
+          background: #008c44;
+        }
+
+        .grid-line-h {
+          width: 100%;
+          height: 1px;
+        }
+
+        .grid-line-v {
+          height: 100%;
+          width: 1px;
+        }
+
+        .grid-line-pulse {
+          animation: gridPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+          0%, 100% {
+            background: #008c44;
+            box-shadow: 0 0 0 rgba(0, 255, 100, 0);
+          }
+          50% {
+            background: #00ff64;
+            box-shadow: 0 0 8px rgba(0, 255, 100, 0.6);
+          }
         }
 
         .nav-bar {
@@ -176,43 +202,6 @@ export default function Home() {
           object-fit: cover;
         }
 
-        .pulse-line-vertical {
-          position: absolute;
-          width: 2px;
-          background: linear-gradient(180deg, transparent, #00ff64, transparent);
-          z-index: 2;
-          animation: pulseVertical 2s ease-in-out infinite;
-        }
-
-        .pulse-line-horizontal {
-          position: absolute;
-          height: 2px;
-          background: linear-gradient(90deg, transparent, #00ff64, transparent);
-          z-index: 2;
-          animation: pulseHorizontal 2s ease-in-out infinite;
-        }
-
-        @keyframes pulseVertical {
-          0%, 100% {
-            opacity: 0.2;
-            transform: scaleY(0.8);
-          }
-          50% {
-            opacity: 1;
-            transform: scaleY(1);
-          }
-        }
-
-        @keyframes pulseHorizontal {
-          0%, 100% {
-            opacity: 0.2;
-            transform: scaleX(0.8);
-          }
-          50% {
-            opacity: 1;
-            transform: scaleX(1);
-          }
-        }
 
         .eyebrow {
           font-family: 'Saans Mono', monospace;
@@ -348,7 +337,31 @@ export default function Home() {
         }
       `}</style>
 
-      <div className="grid-bg"></div>
+      {/* Grid Lines */}
+      <div className="grid-bg">
+        {/* Horizontal lines - every 120px */}
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div
+            key={`h-${i}`}
+            className={`grid-line grid-line-h ${[2, 5, 8].includes(i) ? 'grid-line-pulse' : ''}`}
+            style={{
+              top: `${i * 120}px`,
+              animationDelay: `${i * 0.3}s`
+            }}
+          />
+        ))}
+        {/* Vertical lines - every 120px */}
+        {Array.from({ length: 16 }).map((_, i) => (
+          <div
+            key={`v-${i}`}
+            className={`grid-line grid-line-v ${[3, 7, 11].includes(i) ? 'grid-line-pulse' : ''}`}
+            style={{
+              left: `${i * 120}px`,
+              animationDelay: `${i * 0.4}s`
+            }}
+          />
+        ))}
+      </div>
 
       {/* Navigation */}
       <nav className="nav-bar">
@@ -370,36 +383,21 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="hero">
-        {/* Colored Cells - just blocks, no logos */}
+        {/* Colored Cells - aligned to 120px grid */}
         <div className="colored-cell" style={{ top: '120px', left: '0px', width: '120px', height: '120px', background: '#8b8b2d' }}></div>
-        <div className="colored-cell" style={{ top: '180px', right: '0px', width: '120px', height: '120px', background: '#0000cc' }}></div>
-        <div className="colored-cell" style={{ top: '360px', right: '0px', width: '120px', height: '120px', background: '#b3428b' }}></div>
-        <div className="colored-cell" style={{ top: '580px', right: '0px', width: '120px', height: '120px', background: '#8b8b2d' }}></div>
-        <div className="colored-cell" style={{ bottom: '660px', left: '0px', width: '120px', height: '120px', background: '#0000cc' }}></div>
-        <div className="colored-cell" style={{ bottom: '540px', left: '240px', width: '120px', height: '120px', background: '#b3428b' }}></div>
-        <div className="colored-cell" style={{ bottom: '780px', left: '0px', width: '120px', height: '120px', background: '#0000cc' }}></div>
+        <div className="colored-cell" style={{ top: '240px', right: '0px', width: '120px', height: '120px', background: '#0000cc' }}></div>
+        <div className="colored-cell" style={{ top: '480px', right: '0px', width: '120px', height: '120px', background: '#b3428b' }}></div>
+        <div className="colored-cell" style={{ top: '600px', right: '0px', width: '120px', height: '120px', background: '#8b8b2d' }}></div>
+        <div className="colored-cell" style={{ bottom: '720px', left: '0px', width: '120px', height: '120px', background: '#0000cc' }}></div>
+        <div className="colored-cell" style={{ bottom: '600px', left: '240px', width: '120px', height: '120px', background: '#b3428b' }}></div>
+        <div className="colored-cell" style={{ bottom: '840px', left: '0px', width: '120px', height: '120px', background: '#0000cc' }}></div>
 
-        {/* Profile Photo */}
-        <div className="profile-photo" style={{ top: '540px', right: '60px' }}>
+        {/* Profile Photo - aligned to grid */}
+        <div className="profile-photo" style={{ top: '600px', right: '60px' }}>
           <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #00ff64 0%, #008c44 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', fontWeight: 700, color: '#002910' }}>
             A
           </div>
         </div>
-
-        {/* Pulsating Grid Lines */}
-        {mounted && (
-          <>
-            {/* Vertical lines */}
-            <div className="pulse-line-vertical" style={{ left: '120px', top: '120px', height: '480px', animationDelay: '0s' }}></div>
-            <div className="pulse-line-vertical" style={{ right: '120px', top: '180px', height: '540px', animationDelay: '0.5s' }}></div>
-            <div className="pulse-line-vertical" style={{ left: '240px', bottom: '540px', height: '320px', animationDelay: '1s' }}></div>
-
-            {/* Horizontal lines */}
-            <div className="pulse-line-horizontal" style={{ top: '120px', left: '120px', width: '400px', animationDelay: '0.3s' }}></div>
-            <div className="pulse-line-horizontal" style={{ top: '360px', right: '120px', width: '500px', animationDelay: '0.8s' }}></div>
-            <div className="pulse-line-horizontal" style={{ bottom: '660px', left: '120px', width: '600px', animationDelay: '1.3s' }}></div>
-          </>
-        )}
 
         <div className="eyebrow">Enterprise Integrations</div>
 
